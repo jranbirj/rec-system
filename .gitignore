@@ -1,2 +1,5 @@
-.json
-.tar
+*.json
+*.tar
+Yelp JSON
+yelp_dataset
+*.pdf
