@@ -3,3 +3,4 @@
 Yelp JSON
 yelp_dataset
 *.pdf
+.venv
