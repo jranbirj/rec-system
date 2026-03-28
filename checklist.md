@@ -21,7 +21,6 @@
 - [ ] Implement contrastive loss training
 - [ ] Train two-tower model
 - [ ] Compare results vs. SVD baseline across all metrics
-- [ ] TA check-in
 
 ### Phase 4 — Experiments
 
