@@ -3,7 +3,7 @@
 ### Phase 1 — Data
 
 - [x] Download and explore Yelp Open Dataset
-- [ ] Filter and clean user and business data
+- [x] Filter and clean user and business data
 - [ ] Feature engineering (user tower features, item tower features)
 - [ ] Create stratified train/validation/test splits
 - [ ] Build data preprocessing pipeline
@@ -21,7 +21,6 @@
 - [ ] Implement contrastive loss training
 - [ ] Train two-tower model
 - [ ] Compare results vs. SVD baseline across all metrics
-- [ ] TA check-in
 
 ### Phase 4 — Experiments
 
