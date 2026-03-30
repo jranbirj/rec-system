@@ -4,9 +4,9 @@
 
 - [x] Download and explore Yelp Open Dataset
 - [x] Filter and clean user and business data
-- [ ] Feature engineering (user tower features, item tower features)
-- [ ] Create stratified train/validation/test splits
-- [ ] Build data preprocessing pipeline
+- [x] Feature engineering (user tower features, item tower features)
+- [x] Create stratified train/validation/test splits
+- [x] Build data preprocessing pipeline
 
 ### Phase 2 — Baseline Model
 
