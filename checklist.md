@@ -10,7 +10,7 @@
 
 ### Phase 2 — Baseline Model
 
-- [ ] Implement SVD matrix factorization model
+- [x] Implement SVD matrix factorization model
 - [ ] Train SVD on interaction data
 - [ ] Evaluate baseline: Precision@K, Recall@K, NDCG@K, Hit Rate@K (k=5,10,20)
 
