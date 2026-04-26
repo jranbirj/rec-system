@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.DS_Store
+
+# Local Qdrant store — rebuild from build_qdrant.py rather than commit.
+qdrant_data/
+
+# Symlinked / copied export from notebook 04.
+qdrant_export/
