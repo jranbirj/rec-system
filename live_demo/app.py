@@ -16,12 +16,14 @@ import gradio as gr
 import numpy as np
 import pandas as pd
 from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
+from qdrant_client.models import Filter, FieldCondition, MatchValue
 
 EXPORT_DIR  = Path(os.environ.get("EXPORT_DIR",  "./qdrant_export"))
 QDRANT_PATH = Path(os.environ.get("QDRANT_PATH", "./qdrant_data"))
 COLLECTION  = os.environ.get("QDRANT_COLLECTION", "businesses")
 N_USERS_IN_PICKER = 200
+RERANK_POOL_FACTOR = 4   # fetch this many × top_k from Qdrant before score perturbation
+RERANK_NOISE_STD   = 0.02  # std of Gaussian noise added to scores
 
 
 def _require(path: Path, hint: str) -> None:
@@ -79,7 +81,7 @@ n_pts = qdrant.count(COLLECTION).count
 print(f"  collection '{COLLECTION}': {n_pts:,} points\n")
 
 
-def recommend(user_id: str, city: str, max_price: int, top_k: int):
+def recommend(user_id: str, city: str, top_k: int):
     if not user_id or user_id not in user_id_to_idx:
         return "User not found.", pd.DataFrame()
 
@@ -88,19 +90,20 @@ def recommend(user_id: str, city: str, max_price: int, top_k: int):
     must = []
     if city and city != "(any)":
         must.append(FieldCondition(key="city",  match=MatchValue(value=city)))
-    if max_price and max_price < 4:
-        must.append(FieldCondition(key="price", range=Range(lte=max_price)))
     qfilter = Filter(must=must) if must else None
 
-    # qdrant-client >= 1.10 deprecates .search() in favor of .query_points().
+    pool_size = int(top_k) * RERANK_POOL_FACTOR
     result = qdrant.query_points(
         collection_name=COLLECTION,
         query=vec,
         query_filter=qfilter,
-        limit=int(top_k),
+        limit=pool_size,
         with_payload=True,
     )
     hits = result.points
+    scores = np.array([h.score for h in hits], dtype=np.float32)
+    scores += np.random.normal(0, RERANK_NOISE_STD, size=len(scores))
+    hits = [hits[i] for i in np.argsort(scores)[::-1][:int(top_k)]]
 
     rows = []
     for h in hits:
@@ -141,7 +144,6 @@ with gr.Blocks(title="Two-Tower Restaurant Recs") as demo:
                 label=f"User (top {len(sample_user_choices)} by training history)",
             )
             city_picker  = gr.Dropdown(choices=CITIES, value="(any)", label="City filter")
-            price_slider = gr.Slider(1, 4, value=4, step=1, label="Max price ($1 to $4)")
             topk_slider  = gr.Slider(1, 50, value=10, step=1, label="Top K")
             go_btn       = gr.Button("Recommend", variant="primary")
 
@@ -154,7 +156,7 @@ with gr.Blocks(title="Two-Tower Restaurant Recs") as demo:
 
     go_btn.click(
         recommend,
-        inputs=[user_picker, city_picker, price_slider, topk_slider],
+        inputs=[user_picker, city_picker, topk_slider],
         outputs=[history_box, results_tbl],
     )
 
