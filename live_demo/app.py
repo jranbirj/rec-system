@@ -22,6 +22,8 @@ EXPORT_DIR  = Path(os.environ.get("EXPORT_DIR",  "./qdrant_export"))
 QDRANT_PATH = Path(os.environ.get("QDRANT_PATH", "./qdrant_data"))
 COLLECTION  = os.environ.get("QDRANT_COLLECTION", "businesses")
 N_USERS_IN_PICKER = 200
+RERANK_POOL_FACTOR = 4   # fetch this many × top_k from Qdrant before score perturbation
+RERANK_NOISE_STD   = 0.02  # std of Gaussian noise added to scores
 
 
 def _require(path: Path, hint: str) -> None:
@@ -92,15 +94,18 @@ def recommend(user_id: str, city: str, max_price: int, top_k: int):
         must.append(FieldCondition(key="price", range=Range(lte=max_price)))
     qfilter = Filter(must=must) if must else None
 
-    # qdrant-client >= 1.10 deprecates .search() in favor of .query_points().
+    pool_size = int(top_k) * RERANK_POOL_FACTOR
     result = qdrant.query_points(
         collection_name=COLLECTION,
         query=vec,
         query_filter=qfilter,
-        limit=int(top_k),
+        limit=pool_size,
         with_payload=True,
     )
     hits = result.points
+    scores = np.array([h.score for h in hits], dtype=np.float32)
+    scores += np.random.normal(0, RERANK_NOISE_STD, size=len(scores))
+    hits = [hits[i] for i in np.argsort(scores)[::-1][:int(top_k)]]
 
     rows = []
     for h in hits:
