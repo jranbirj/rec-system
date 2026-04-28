@@ -21,11 +21,12 @@ The five notebooks were written and run on Google Colab. Open each one in Colab,
 Known environment issues we hit:
 
 - The Colab kernel sometimes needs `numpy` reinstalled. One reinstall + kernel restart usually fixes it.
-- Notebooks 04 and 05 had PyTorch install issues. Each notebook now has a `pip install` cell at the top to handle this, but flag this if you see import errors.
+- Notebooks 04 and 05 had PyTorch install issues. Each notebook now has a `pip install` cell at the top to handle this, should no longer be an issue. 
 
 ## Run order
 
-The notebooks must be run in order. Each one depends on outputs of the previous.
+The notebooks must be run in order, until notebook 03. 04 and 05 can be run without 03, but there is a comparison table in 04_two_towers_baseline that pulls from 03_svd_baseline. 
+04_two_towers_baseline and 05_experiments can be run side by side. 
 
 ### 01 — EDA (`01_eda.ipynb`)
 
