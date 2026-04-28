@@ -11,6 +11,7 @@ This README aggregates the notebook run instructions and the live demo setup. Ru
 ### Dataset
 
 Yelp Open Dataset: https://business.yelp.com/data/resources/open-dataset/
+Yelp Category List (for taxonomy): https://business.yelp.com/resources/articles/yelp-category-list/?domain=local-business
 
 Requires ~4GB of space; the full project needs ~10GB. Download the bundle and move the files into a Google Drive folder. Only three of the bundled files are used:
 
