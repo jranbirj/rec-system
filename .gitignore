@@ -5,3 +5,7 @@ yelp_dataset
 *.pdf
 .venv
 *.csv
+.DS_Store
+analysis.md
+checklist.md
+possible_fixes.md
