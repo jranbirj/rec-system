@@ -7,3 +7,4 @@ qdrant_data/
 
 # Symlinked / copied export from notebook 04.
 qdrant_export/
+HF_SPACES_NOTES.md
