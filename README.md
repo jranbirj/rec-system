@@ -122,7 +122,7 @@ Local Gradio app for the two-tower model trained in `notebooks/04_two_towers_bas
   ├── two_tower_best.pt
   └── model_meta.json
   ```
-- Yelp dataset JSONs from https://www.yelp.com/dataset, placed at `"main-project-name"/data/yelp/`:
+- Yelp dataset JSONs from https://www.yelp.com/dataset, Yelp JSON folder placed in root of `"rec-system`:
   - `data/yelp/yelp_academic_dataset_business.json`
   - `data/yelp/yelp_academic_dataset_user.json`
 - `data/train_reviews.parquet` (output of notebook 02).
@@ -151,7 +151,7 @@ python3 app.py
 
 these steps should take no more than 2-3 minutes each, except when loading Qwen embedder for first time.
 
-First launch downloads the Qwen embedder (~1.2GB, one time). Open the URL Gradio prints (`http://some port`).
+First launch downloads the Qwen embedder (~1.2GB, one time). Open the URL Gradio prints (`http://127.0.0.1:7860/`).
 
 ### Subsequent runs
 
